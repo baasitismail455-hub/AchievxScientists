@@ -1,0 +1,2 @@
+{% extends "base.html" %}{% block title %}{{ code }} — AchievX Scientist{% endblock %}
+{% block content %}<section class="empty-state error-state"><div class="empty-icon">{{ code }}</div><h1>{{ 'Access restricted' if code == 403 else 'Page not found' }}</h1><p>{{ message }}</p><a class="btn btn-primary" href="{{ url_for('home') }}">Return to portfolio</a></section>{% endblock %}

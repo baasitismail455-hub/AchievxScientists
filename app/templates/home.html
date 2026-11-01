@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}AchievX Scientist — A living portfolio of research{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-copy"><div class="eyebrow"><span class="eyebrow-dot"></span> A living scientific portfolio</div>
+      <h1>Research is a journey.<br><em>Keep the journey visible.</em></h1>
+      <p class="hero-lead">A home for the projects you build, the questions you pursue, the data you gather and the progress you make — one research update at a time.</p>
+      <div class="hero-actions"><a class="btn btn-primary" href="#projects">Explore projects <span>↗</span></a><a class="btn btn-quiet" href="{{ url_for('auth_register') }}">Join the workspace</a></div>
+      <div class="hero-note"><span class="mini-avatars"><i>B</i><i>R</i><i>+</i></span><span>Built for independent work and collaboration</span></div>
+    </div>
+    <div class="hero-art">
+      <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+      <div class="research-card">
+        <div class="research-card-top"><span class="live-indicator"></span><span>RESEARCH IN MOTION</span><span class="card-dots">•••</span></div>
+        <div class="art-document"><div class="doc-symbol">⌁</div><div class="doc-lines"><i></i><i></i><i></i></div></div>
+        <div class="art-title">Ideas become evidence.</div><div class="art-subtitle">A continuous record of discovery.</div>
+        <div class="art-progress"><span></span></div><div class="art-meta"><span>PROJECT WORKSPACE</span><b>01 / 04</b></div>
+      </div>
+      <div class="floating-chip chip-top"><span>↗</span> Progress, documented</div><div class="floating-chip chip-bottom"><span class="chip-blue">●</span> Data · Notes · Media · Files</div>
+    </div>
+  </div>
+</section>
+<section class="principles"><div><strong>01</strong><span>Projects, not just papers</span></div><div><strong>02</strong><span>Progress over time</span></div><div><strong>03</strong><span>Evidence in one place</span></div><div><strong>04</strong><span>Collaboration made simple</span></div></section>
+<section class="section projects-section" id="projects">
+  <div class="section-heading"><div><div class="eyebrow">THE PORTFOLIO</div><h2>Research, as it happens.</h2><p>Explore projects, follow their development and see the work behind each milestone.</p></div>
+    <form class="search-form" method="get" action="{{ url_for('home') }}"><input name="q" value="{{ query }}" placeholder="Search projects or disciplines…" aria-label="Search projects"><button aria-label="Search">⌕</button></form>
+  </div>
+  {% if projects %}
+  <div class="project-grid">
+    {% for project in projects %}
+    <article class="project-card">
+      <a class="project-cover" href="{{ url_for('project_detail', slug=project.slug) }}">
+        {% if project.cover_image %}<img src="{{ url_for('uploaded_file', filename=project.cover_image) }}" alt="{{ project.title }} cover">
+        {% else %}<div class="cover-placeholder cover-{{ loop.index0 % 4 }}"><span>AX<span>·</span></span><small>RESEARCH PROJECT</small></div>{% endif %}
+        <span class="status-pill status-{{ project.status|lower|replace(' ', '-') }}">{{ project.status }}</span>
+      </a>
+      <div class="project-card-body"><div class="project-kicker">{{ project.discipline or "Scientific research" }} <span>·</span> {{ project.collaboration_type }}</div>
+        <h3><a href="{{ url_for('project_detail', slug=project.slug) }}">{{ project.title }}</a></h3><p>{{ project.summary }}</p>
+        <div class="card-footer"><div class="author"><div class="avatar avatar-sm">{% if project.owner.avatar %}<img src="{{ url_for('uploaded_file', filename=project.owner.avatar) }}" alt="">{% else %}{{ project.owner.initials() }}{% endif %}</div><span><b>{{ project.owner.name }}</b><small>Project lead</small></span></div><a class="arrow-link" href="{{ url_for('project_detail', slug=project.slug) }}">View project <span>→</span></a></div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state"><div class="empty-icon">⌁</div><h3>{% if query %}No projects match that search.{% else %}The first project starts here.{% endif %}</h3><p>{% if query %}Try a different keyword or discipline.{% else %}This portfolio is ready to document the research journey. Create an account to establish the administrator workspace and publish the first project.{% endif %}</p>{% if not query %}<a class="btn btn-primary" href="{{ url_for('auth_register') }}">Set up the workspace</a>{% endif %}</div>
+  {% endif %}
+</section>
+<section class="closing-cta"><div><div class="eyebrow light-eyebrow">BUILT FOR THE LONG VIEW</div><h2>Let the work speak.<br><em>And let it keep growing.</em></h2><p>Document the process, preserve the materials and bring the right people into the work.</p></div><a class="btn btn-white" href="{{ url_for('auth_register') }}">Create your account <span>↗</span></a></section>
+{% endblock %}
